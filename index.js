@@ -1,9 +1,0 @@
-const http = require("http");
-
-const app = require("./app");
-
-const server = http.createServer(app);
-
-server.listen(3000, () => {
-  console.log(`${new Date().toLocaleString()} Server is running on PORT 3000`);
-});
