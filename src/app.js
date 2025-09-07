@@ -1,8 +1,9 @@
 const express = require("express");
-const router = require("./routes/route");
+
+const v1Routes = require("./routes/v1");
 
 const app = express();
 app.use(express.json());
-app.use(router);
+app.use("/api/v1", v1Routes);
 
 module.exports = app;
