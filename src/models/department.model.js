@@ -1,20 +1,20 @@
-import { DataTypes } from "sequelize";
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/db");
 
-export default (sequelize) =>
-  sequelize.define(
-    "Department",
-    {
-      department_id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      name: { type: DataTypes.STRING(100), allowNull: false, unique: true },
-      description: { type: DataTypes.TEXT },
-      created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+const Department = sequelize.define(
+  "Department",
+  {
+    department_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    {
-      tableName: "departments",
-      timestamps: false,
-    }
-  );
+    name: { type: DataTypes.STRING(100), allowNull: false, unique: true },
+  },
+  {
+    tableName: "departments",
+    timestamps: false,
+  }
+);
+
+module.exports = Department;

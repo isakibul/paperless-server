@@ -1,26 +1,28 @@
-import { DataTypes } from "sequelize";
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/db");
 
-export default (sequelize) =>
-  sequelize.define(
-    "Approval",
-    {
-      approval_id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      document_id: { type: DataTypes.INTEGER, allowNull: false },
-      approver_id: { type: DataTypes.INTEGER, allowNull: false },
-      signature_id: { type: DataTypes.INTEGER },
-      action: {
-        type: DataTypes.ENUM("pending", "approved", "rejected"),
-        defaultValue: "pending",
-      },
-      comments: { type: DataTypes.TEXT },
-      action_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+const Approval = sequelize.define(
+  "Approval",
+  {
+    approval_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    {
-      tableName: "approvals",
-      timestamps: false,
-    }
-  );
+    document_id: { type: DataTypes.INTEGER, allowNull: false },
+    user_id: { type: DataTypes.INTEGER, allowNull: false },
+    status: {
+      type: DataTypes.ENUM("pending", "approved", "rejected"),
+      defaultValue: "pending",
+    },
+    comments: { type: DataTypes.TEXT },
+  },
+  {
+    tableName: "approvals",
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+  }
+);
+
+module.exports = Approval;
