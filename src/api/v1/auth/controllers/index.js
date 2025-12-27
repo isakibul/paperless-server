@@ -1,7 +1,7 @@
 const organizationRegister = require("./organization-register");
-const staffRegister = require("./staff-register");
+const organizationLogin = require("./organization-login");
 
 module.exports = {
   organizationRegister,
-  staffRegister,
+  organizationLogin,
 };
