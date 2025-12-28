@@ -8,5 +8,6 @@ router.post("/department-register", authControllers.departmentRegister);
 router.post("/department-login", authControllers.departmentLogin);
 
 router.post("/staff-register", authControllers.registerStaff);
+router.post("/staff-login", authControllers.staffLogin);
 
 module.exports = router;

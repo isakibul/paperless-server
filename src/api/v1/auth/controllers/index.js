@@ -5,6 +5,7 @@ const departmentRegister = require("./department-register");
 const departmentLogin = require("./department-login");
 
 const registerStaff = require("./staff-register");
+const staffLogin = require("./staff-login");
 
 module.exports = {
   organizationRegister,
@@ -12,4 +13,5 @@ module.exports = {
   departmentRegister,
   departmentLogin,
   registerStaff,
+  staffLogin,
 };
