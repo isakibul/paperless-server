@@ -7,4 +7,6 @@ router.post("/organization-login", authControllers.organizationLogin);
 router.post("/department-register", authControllers.departmentRegister);
 router.post("/department-login", authControllers.departmentLogin);
 
+router.post("/staff-register", authControllers.registerStaff);
+
 module.exports = router;
