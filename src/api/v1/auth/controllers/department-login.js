@@ -50,7 +50,7 @@ const departmentLogin = async (req, res) => {
         departmentUsername: department.departmentUsername,
         organizationId: department.organizationId,
       },
-      process.env.JWT_SECRET || "supersecretkey",
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 

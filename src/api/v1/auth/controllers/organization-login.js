@@ -30,7 +30,7 @@ const organizationLogin = async (req, res) => {
         id: organization.id,
         organizationUsername: organization.organizationUsername,
       },
-      process.env.JWT_SECRET || "supersecretkey",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 

@@ -62,7 +62,7 @@ const staffLogin = async (req, res) => {
         role: staff.role,
         deptId: staff.deptId,
       },
-      process.env.JWT_SECRET || "supersecretkey",
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
