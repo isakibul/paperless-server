@@ -23,8 +23,7 @@ const registerDepartment = async (req, res) => {
   try {
     const validatedData = departmentSchema.parse(req.body);
 
-    // const organizationId = req.user.id;
-    const organizationId = req.body.organizationId;
+    const organizationId = req.user.id;
 
     /**
      * Check if department username already exists under this organization
