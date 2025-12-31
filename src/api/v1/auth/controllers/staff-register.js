@@ -6,7 +6,6 @@ const { Staff, Department } = require("../../../../models");
  * Zod schema for staff registration
  */
 const staffRegisterSchema = z.object({
-  deptId: z.string().uuid("Invalid department ID"),
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -22,11 +21,14 @@ const registerStaff = async (req, res) => {
      * Validate input
      */
     const validatedData = staffRegisterSchema.parse(req.body);
+    const deptId = req.user.id;
+
+    console.log(deptId);
 
     /**
      * Check department exists
      */
-    const department = await Department.findByPk(validatedData.deptId);
+    const department = await Department.findByPk(deptId);
     if (!department) {
       return res.status(404).json({ message: "Department not found" });
     }
@@ -36,7 +38,7 @@ const registerStaff = async (req, res) => {
      */
     const existingStaff = await Staff.findOne({
       where: {
-        deptId: validatedData.deptId,
+        deptId,
         username: validatedData.username,
       },
     });
@@ -57,7 +59,7 @@ const registerStaff = async (req, res) => {
      * Create staff
      */
     const staff = await Staff.create({
-      deptId: validatedData.deptId,
+      deptId: deptId,
       fullName: validatedData.fullName,
       username: validatedData.username,
       password: hashedPassword,
