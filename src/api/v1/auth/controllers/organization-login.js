@@ -3,15 +3,24 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Organization } = require("../../../../models");
 
+/**
+ * Zod schema for organization login
+ */
 const loginSchema = z.object({
   organizationUsername: z.string().min(3, "Username is required"),
   password: z.string().min(6, "Password is required"),
 });
 
+/**
+ * Organization login controller
+ */
 const organizationLogin = async (req, res) => {
   try {
     const { organizationUsername, password } = loginSchema.parse(req.body);
 
+    /**
+     * Find organization by username
+     */
     const organization = await Organization.findOne({
       where: { organizationUsername },
     });
@@ -25,6 +34,9 @@ const organizationLogin = async (req, res) => {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
+    /**
+     * Generate JWT Token
+     */
     const token = jwt.sign(
       {
         id: organization.id,

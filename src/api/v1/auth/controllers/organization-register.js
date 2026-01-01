@@ -2,6 +2,9 @@ const { z } = require("zod");
 const bcrypt = require("bcrypt");
 const { Organization } = require("../../../../models");
 
+/**
+ * Validation schema for creating a oraganization
+ */
 const organizationSchema = z.object({
   organizationUsername: z
     .string()
@@ -14,10 +17,17 @@ const organizationSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+/**
+ *
+ * Register a new organization
+ */
 const organizationRegister = async (req, res) => {
   try {
     const validatedData = organizationSchema.parse(req.body);
 
+    /**
+     * Check if organization username already exists
+     */
     const existingOrg = await Organization.findOne({
       where: { organizationUsername: validatedData.organizationUsername },
     });
@@ -28,6 +38,9 @@ const organizationRegister = async (req, res) => {
         .json({ message: "Organization username already exists" });
     }
 
+    /**
+     * Hash password before storing
+     */
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(validatedData.password, salt);
 
@@ -36,6 +49,9 @@ const organizationRegister = async (req, res) => {
       password: hashedPassword,
     });
 
+    /**
+     * Success Response
+     */
     return res.status(201).json({
       message: "Organization registered successfully",
       data: {
