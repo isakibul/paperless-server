@@ -43,7 +43,7 @@ const organizationLogin = async (req, res) => {
         organizationUsername: organization.organizationUsername,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "7d" }
     );
 
     return res.status(200).json({
