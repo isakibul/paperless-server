@@ -29,7 +29,7 @@ function applyAssociations() {
    */
   Department.hasMany(Staff, {
     foreignKey: {
-      name: "deptId",
+      name: "departmentId",
       allowNull: false,
     },
     as: "staffs",
@@ -39,7 +39,7 @@ function applyAssociations() {
 
   Staff.belongsTo(Department, {
     foreignKey: {
-      name: "deptId",
+      name: "departmentId",
       allowNull: false,
     },
     as: "department",

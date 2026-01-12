@@ -23,8 +23,6 @@ const registerStaff = async (req, res) => {
     const validatedData = staffRegisterSchema.parse(req.body);
     const departmentId = req.user.id;
 
-    console.log(departmentId);
-
     /**
      * Check department exists
      */
