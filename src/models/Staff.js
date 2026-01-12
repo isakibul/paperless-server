@@ -10,7 +10,7 @@ const Staff = sequelize.define(
       primaryKey: true,
     },
 
-    deptId: {
+    departmentId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {

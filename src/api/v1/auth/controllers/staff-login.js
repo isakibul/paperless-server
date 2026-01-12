@@ -79,6 +79,7 @@ const staffLogin = async (req, res) => {
         deptId: staff.deptId,
         departmentName: staff.department.departmentName,
         organizationId: staff.department.organizationId,
+        organizationName: staff.department.organizationName,
         token,
       },
     });
