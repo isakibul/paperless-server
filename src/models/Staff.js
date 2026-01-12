@@ -67,7 +67,7 @@ const Staff = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ["deptId", "username"],
+        fields: ["departmentId", "username"],
       },
     ],
   }

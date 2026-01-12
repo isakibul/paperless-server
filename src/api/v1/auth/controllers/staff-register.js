@@ -21,14 +21,14 @@ const registerStaff = async (req, res) => {
      * Validate input
      */
     const validatedData = staffRegisterSchema.parse(req.body);
-    const deptId = req.user.id;
+    const departmentId = req.user.id;
 
-    console.log(deptId);
+    console.log(departmentId);
 
     /**
      * Check department exists
      */
-    const department = await Department.findByPk(deptId);
+    const department = await Department.findByPk(departmentId);
     if (!department) {
       return res.status(404).json({ message: "Department not found" });
     }
@@ -38,7 +38,7 @@ const registerStaff = async (req, res) => {
      */
     const existingStaff = await Staff.findOne({
       where: {
-        deptId,
+        departmentId,
         username: validatedData.username,
       },
     });
@@ -59,7 +59,7 @@ const registerStaff = async (req, res) => {
      * Create staff
      */
     const staff = await Staff.create({
-      deptId: deptId,
+      departmentId: departmentId,
       fullName: validatedData.fullName,
       username: validatedData.username,
       password: hashedPassword,
@@ -73,7 +73,7 @@ const registerStaff = async (req, res) => {
         fullName: staff.fullName,
         username: staff.username,
         role: staff.role,
-        deptId: staff.deptId,
+        departmentId: staff.departmentId,
       },
     });
   } catch (err) {

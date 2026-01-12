@@ -60,7 +60,7 @@ const staffLogin = async (req, res) => {
         id: staff.id,
         username: staff.username,
         role: staff.role,
-        deptId: staff.deptId,
+        departmentId: staff.departmentId,
       },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
@@ -76,7 +76,7 @@ const staffLogin = async (req, res) => {
         username: staff.username,
         fullName: staff.fullName,
         role: staff.role,
-        deptId: staff.deptId,
+        departmentId: staff.departmentId,
         departmentName: staff.department.departmentName,
         organizationId: staff.department.organizationId,
         organizationName: staff.department.organizationName,

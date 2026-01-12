@@ -16,7 +16,9 @@ const departmentLoginSchema = z.object({
  */
 const departmentLogin = async (req, res) => {
   try {
-    // Validate request body
+    /**
+     * Validate request body
+     */
     const validatedData = departmentLoginSchema.parse(req.body);
 
     /**
