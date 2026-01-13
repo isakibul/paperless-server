@@ -1,7 +1,7 @@
 const { z } = require("zod");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Staff, Department } = require("../../../../models");
+const { Staff, Department, Organization } = require("../../../../models");
 
 /**
  * Zod schema for staff login
@@ -30,6 +30,11 @@ const staffLogin = async (req, res) => {
         model: Department,
         as: "department",
         attributes: ["id", "departmentName", "organizationId"],
+        include: {
+          model: Organization,
+          as: "organization",
+          attributes: ["id", "organizationName"],
+        },
       },
     });
 
@@ -76,10 +81,10 @@ const staffLogin = async (req, res) => {
         username: staff.username,
         fullName: staff.fullName,
         role: staff.role,
-        departmentId: staff.departmentId,
+        departmentId: staff.department.departmentId,
         departmentName: staff.department.departmentName,
         organizationId: staff.department.organizationId,
-        organizationName: staff.department.organizationName,
+        organizationName: staff.department.organization.organizationName,
         token,
       },
     });
