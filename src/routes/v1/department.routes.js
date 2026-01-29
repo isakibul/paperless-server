@@ -5,10 +5,14 @@ const {
   deleteDepartment,
 } = require("../../api/v1/organization");
 
-// List all departments
+/**
+ * List all departments
+ */
 router.get("/departments", getAllDepartments);
 
-// Delete department
+/**
+ * Delete department
+ */
 router.delete("/departments/:id", deleteDepartment);
 
 module.exports = router;
