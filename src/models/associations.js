@@ -1,6 +1,8 @@
 const Organization = require("./Organization");
 const Department = require("./Department");
 const Staff = require("./Staff");
+const File = require("./File");
+const FileContent = require("./FileContent");
 
 function applyAssociations() {
   /**
@@ -45,5 +47,8 @@ function applyAssociations() {
     as: "department",
   });
 }
+
+File.hasOne(FileContent, { foreignKey: "fileId" });
+FileContent.belongsTo(File, { foreignKey: "fileId" });
 
 module.exports = applyAssociations;
