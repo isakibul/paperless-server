@@ -70,7 +70,7 @@ const Staff = sequelize.define(
         fields: ["departmentId", "username"],
       },
     ],
-  }
+  },
 );
 
 module.exports = Staff;

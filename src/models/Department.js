@@ -80,7 +80,7 @@ const Department = sequelize.define(
         fields: ["organizationId", "departmentUsername"],
       },
     ],
-  }
+  },
 );
 
 module.exports = Department;

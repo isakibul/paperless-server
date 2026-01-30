@@ -69,7 +69,7 @@ const Organization = sequelize.define(
   {
     tableName: "organizations",
     timestamps: true,
-  }
+  },
 );
 
 module.exports = Organization;

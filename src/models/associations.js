@@ -1,9 +1,6 @@
 const Organization = require("./Organization");
 const Department = require("./Department");
 const Staff = require("./Staff");
-const File = require("./File");
-const FileContent = require("./FileContent");
-const FileDepartment = require("./FileDepartment");
 
 function applyAssociations() {
   /**
@@ -48,30 +45,5 @@ function applyAssociations() {
     as: "department",
   });
 }
-
-File.hasOne(FileContent, { foreignKey: "fileId" });
-FileContent.belongsTo(File, { foreignKey: "fileId" });
-
-File.belongsToMany(Department, {
-  through: FileDepartment,
-  foreignKey: "fileId",
-  as: "routedDepartments",
-});
-
-Department.belongsToMany(File, {
-  through: FileDepartment,
-  foreignKey: "departmentId",
-  as: "receivedFiles",
-});
-
-// Direct association for easier eager loading
-File.hasMany(FileDepartment, { foreignKey: "fileId", as: "fileDepartments" });
-FileDepartment.belongsTo(File, { foreignKey: "fileId" });
-
-// Also associate FileDepartment to Department for eager loading
-FileDepartment.belongsTo(Department, {
-  foreignKey: "departmentId",
-  as: "department",
-});
 
 module.exports = applyAssociations;
