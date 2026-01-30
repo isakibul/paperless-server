@@ -3,6 +3,7 @@ const Department = require("./Department");
 const Staff = require("./Staff");
 const File = require("./File");
 const FileContent = require("./FileContent");
+const FileDepartment = require("./FileDepartment");
 
 function applyAssociations() {
   /**
@@ -50,5 +51,17 @@ function applyAssociations() {
 
 File.hasOne(FileContent, { foreignKey: "fileId" });
 FileContent.belongsTo(File, { foreignKey: "fileId" });
+
+File.belongsToMany(Department, {
+  through: FileDepartment,
+  foreignKey: "fileId",
+  as: "routedDepartments",
+});
+
+Department.belongsToMany(File, {
+  through: FileDepartment,
+  foreignKey: "departmentId",
+  as: "receivedFiles",
+});
 
 module.exports = applyAssociations;
