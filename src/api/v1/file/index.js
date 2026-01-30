@@ -1,5 +1,7 @@
 const FileDepartment = require("../../../models/FileDepartment");
 const File = require("../../../models/File");
+const FileContent = require("../../../models/FileContent");
+const Department = require("../../../models/Department");
 
 const createFile = async (req, res) => {
   try {
@@ -67,4 +69,39 @@ const createFile = async (req, res) => {
   }
 };
 
-module.exports = { createFile };
+const getAllFiles = async (req, res) => {
+  try {
+    const files = await File.findAll({
+      include: [
+        {
+          model: FileContent,
+          as: "FileContent", // If you didn’t define an alias, Sequelize will use the model name
+        },
+        {
+          model: FileDepartment,
+          as: "routedDepartments",
+          include: [
+            {
+              model: Department,
+              as: "department", // Make sure you have Department associations set
+            },
+          ],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.status(200).json({
+      success: true,
+      data: files,
+    });
+  } catch (error) {
+    console.error("Get All Files Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch files",
+    });
+  }
+};
+
+module.exports = { createFile, getAllFiles };
