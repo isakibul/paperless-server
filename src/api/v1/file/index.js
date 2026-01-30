@@ -75,15 +75,15 @@ const getAllFiles = async (req, res) => {
       include: [
         {
           model: FileContent,
-          as: "FileContent", // If you didn’t define an alias, Sequelize will use the model name
+          as: "FileContent",
         },
         {
           model: FileDepartment,
-          as: "routedDepartments",
+          as: "fileDepartments",
           include: [
             {
               model: Department,
-              as: "department", // Make sure you have Department associations set
+              as: "department",
             },
           ],
         },

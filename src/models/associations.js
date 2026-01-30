@@ -64,4 +64,14 @@ Department.belongsToMany(File, {
   as: "receivedFiles",
 });
 
+// Direct association for easier eager loading
+File.hasMany(FileDepartment, { foreignKey: "fileId", as: "fileDepartments" });
+FileDepartment.belongsTo(File, { foreignKey: "fileId" });
+
+// Also associate FileDepartment to Department for eager loading
+FileDepartment.belongsTo(Department, {
+  foreignKey: "departmentId",
+  as: "department",
+});
+
 module.exports = applyAssociations;
