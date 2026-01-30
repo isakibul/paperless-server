@@ -1,4 +1,5 @@
 const FileDepartment = require("../../../models/FileDepartment");
+const File = require("../../../models/File");
 
 const createFile = async (req, res) => {
   try {
@@ -10,6 +11,8 @@ const createFile = async (req, res) => {
       staffId,
       targetDepartments = [],
     } = req.body;
+
+    console.log(req.body);
 
     if (!title || !content) {
       return res.status(400).json({
