@@ -1,7 +1,9 @@
 const File = require("../../../models/File");
-const FileContent = require(".../../../models/FileContent");
+const FileContent = require("../../../models/FileContent");
 
-exports.createFile = async (req, res) => {
+const createFile = async (req, res) => {
+  console.log("calling");
+
   try {
     const { title, content, organizationId, departmentId, staffId } = req.body;
 
@@ -38,4 +40,8 @@ exports.createFile = async (req, res) => {
       message: "Failed to create file",
     });
   }
+};
+
+module.exports = {
+  createFile,
 };
