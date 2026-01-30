@@ -1,11 +1,15 @@
-const File = require("../../../models/File");
-const FileContent = require("../../../models/FileContent");
+const FileDepartment = require("../../../models/FileDepartment");
 
 const createFile = async (req, res) => {
-  console.log("calling");
-
   try {
-    const { title, content, organizationId, departmentId, staffId } = req.body;
+    const {
+      title,
+      content,
+      organizationId,
+      departmentId,
+      staffId,
+      targetDepartments = [],
+    } = req.body;
 
     if (!title || !content) {
       return res.status(400).json({
@@ -22,15 +26,33 @@ const createFile = async (req, res) => {
       createdByStaffId: staffId,
     });
 
-    // 2️⃣ Save editor content
+    // 2️⃣ Save content
     await FileContent.create({
       fileId: file.id,
       content,
     });
 
+    // 3️⃣ Route to departments
+    const routes = targetDepartments.map((depId) => ({
+      fileId: file.id,
+      departmentId: depId,
+      canView: true,
+      canEdit: false,
+      canSign: false,
+    }));
+
+    // creator department gets edit
+    routes.push({
+      fileId: file.id,
+      departmentId,
+      canView: true,
+      canEdit: true,
+    });
+
+    await FileDepartment.bulkCreate(routes);
+
     res.status(201).json({
       success: true,
-      message: "File created successfully",
       fileId: file.id,
     });
   } catch (error) {
@@ -42,6 +64,4 @@ const createFile = async (req, res) => {
   }
 };
 
-module.exports = {
-  createFile,
-};
+module.exports = { createFile };
