@@ -2,12 +2,15 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
+import env from "../../../../config/env";
 import { Department, Organization, Staff } from "../../../../models";
 
 /**
  * Zod schema for staff login
  */
 const staffLoginSchema = z.object({
+  organizationUsername: z.string().min(3, "Organization username is required"),
+  departmentUsername: z.string().min(3, "Department username is required"),
   username: z.string().min(3, "Username is required"),
   password: z.string().min(6, "Password is required"),
 });
@@ -22,25 +25,35 @@ const staffLogin = async (req: Request, res: Response): Promise<void> => {
      */
     const validatedData = staffLoginSchema.parse(req.body);
 
+    const organization = await Organization.findOne({
+      where: { organizationUsername: validatedData.organizationUsername },
+    });
+
+    if (!organization) {
+      res.status(404).json({ message: "Organization not found" });
+      return;
+    }
+
+    const department = await Department.findOne({
+      where: {
+        organizationId: organization.id,
+        departmentUsername: validatedData.departmentUsername,
+      },
+    });
+
+    if (!department) {
+      res.status(404).json({ message: "Department not found" });
+      return;
+    }
+
     /**
-     * Find staff by username with department info
+     * Find staff by username inside the selected department
      */
     const staff = await Staff.findOne({
-      where: { username: validatedData.username },
-      include: [
-        {
-          model: Department,
-          as: "department",
-          attributes: ["id", "departmentName", "organizationId"],
-          include: [
-            {
-              model: Organization,
-              as: "organization",
-              attributes: ["id", "organizationName"],
-            },
-          ],
-        },
-      ],
+      where: {
+        departmentId: department.id,
+        username: validatedData.username,
+      },
     });
 
     if (!staff) {
@@ -74,8 +87,9 @@ const staffLogin = async (req: Request, res: Response): Promise<void> => {
         username: staff.username,
         role: staff.role,
         departmentId: staff.departmentId,
+        organizationId: organization.id,
       },
-      process.env.JWT_SECRET as string,
+      env.jwtSecret,
       { expiresIn: "7d" },
     );
 
@@ -90,10 +104,11 @@ const staffLogin = async (req: Request, res: Response): Promise<void> => {
         fullName: staff.fullName,
         role: staff.role,
         departmentId: staff.departmentId,
-        departmentName: (staff as any).department?.departmentName,
-        organizationId: (staff as any).department?.organizationId,
-        organizationName: (staff as any).department?.organization
-          ?.organizationName,
+        departmentUsername: department.departmentUsername,
+        departmentName: department.departmentName,
+        organizationId: organization.id,
+        organizationUsername: organization.organizationUsername,
+        organizationName: organization.organizationName,
         token,
       },
     });

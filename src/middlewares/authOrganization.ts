@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import env from "../config/env";
 
 interface OrganizationJwtPayload {
   id: string;
@@ -25,10 +26,7 @@ const authOrganization = (
 
     const token = authHeader.split(" ")[1];
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string,
-    ) as OrganizationJwtPayload;
+    const decoded = jwt.verify(token, env.jwtSecret) as OrganizationJwtPayload;
 
     /**
      * attach org info to request

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import env from "../config/env";
 
 interface DepartmentJwtPayload {
   id: string;
@@ -26,10 +27,7 @@ const authDepartment = (
 
     const token = authHeader.split(" ")[1];
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string,
-    ) as DepartmentJwtPayload;
+    const decoded = jwt.verify(token, env.jwtSecret) as DepartmentJwtPayload;
 
     /**
      * attach dept info to request

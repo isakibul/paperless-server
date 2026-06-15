@@ -1,18 +1,20 @@
-import dotenv from "dotenv";
 import http from "http";
 import app from "./app";
 import { connectDatabase } from "./config/db";
+import env from "./config/env";
 
-dotenv.config();
+const PORT = env.port;
 
-const PORT = process.env.PORT || 5000;
+const startServer = async (): Promise<void> => {
+  await connectDatabase();
 
-connectDatabase();
+  const server = http.createServer(app);
 
-const server = http.createServer(app);
+  server.listen(PORT, () => {
+    console.log(
+      `${new Date().toISOString()} [INFO] Server running on PORT ${PORT}`,
+    );
+  });
+};
 
-server.listen(PORT, () => {
-  console.log(
-    `${new Date().toISOString()} [INFO] Server running on PORT ${PORT}`,
-  );
-});
+void startServer();

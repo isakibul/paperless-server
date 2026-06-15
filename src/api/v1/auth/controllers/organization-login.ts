@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
+import env from "../../../../config/env";
 import { Organization } from "../../../../models";
 
 /**
@@ -48,7 +49,7 @@ const organizationLogin = async (
         id: organization.id,
         organizationUsername: organization.organizationUsername,
       },
-      process.env.JWT_SECRET as string,
+      env.jwtSecret,
       { expiresIn: "7d" },
     );
 

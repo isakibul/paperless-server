@@ -2,13 +2,15 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
-import { Department } from "../../../../models";
+import env from "../../../../config/env";
+import { Department, Organization } from "../../../../models";
 
 /**
  * Zod schema for department login
  */
 const departmentLoginSchema = z.object({
-  departmentUsername: z.string().min(2, "Department username is required"),
+  organizationUsername: z.string().min(3, "Organization username is required"),
+  departmentUsername: z.string().min(3, "Department username is required"),
   password: z.string().min(6, "Password is required"),
 });
 
@@ -22,15 +24,32 @@ const departmentLogin = async (req: Request, res: Response): Promise<void> => {
      */
     const validatedData = departmentLoginSchema.parse(req.body);
 
+    const organization = await Organization.findOne({
+      where: { organizationUsername: validatedData.organizationUsername },
+    });
+
+    if (!organization) {
+      res.status(404).json({ message: "Organization not found" });
+      return;
+    }
+
     /**
-     * Find department by username
+     * Find department by username inside the selected organization
      */
     const department = await Department.findOne({
-      where: { departmentUsername: validatedData.departmentUsername },
+      where: {
+        organizationId: organization.id,
+        departmentUsername: validatedData.departmentUsername,
+      },
     });
 
     if (!department) {
       res.status(404).json({ message: "Department not found" });
+      return;
+    }
+
+    if (!department.isActive) {
+      res.status(403).json({ message: "Department account is inactive" });
       return;
     }
 
@@ -54,8 +73,9 @@ const departmentLogin = async (req: Request, res: Response): Promise<void> => {
         id: department.id,
         departmentUsername: department.departmentUsername,
         organizationId: department.organizationId,
+        organizationUsername: organization.organizationUsername,
       },
-      process.env.JWT_SECRET as string,
+      env.jwtSecret,
       { expiresIn: "7d" },
     );
 
@@ -66,6 +86,7 @@ const departmentLogin = async (req: Request, res: Response): Promise<void> => {
         departmentUsername: department.departmentUsername,
         departmentName: department.departmentName,
         organizationId: department.organizationId,
+        organizationUsername: organization.organizationUsername,
         token,
       },
     });

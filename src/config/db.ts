@@ -1,12 +1,13 @@
 import { Sequelize } from "sequelize";
+import env from "./env";
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME as string,
-  process.env.DB_USER as string,
-  process.env.DB_PASSWORD as string,
+  env.db.name,
+  env.db.user,
+  env.db.password,
   {
-    host: process.env.DB_HOST as string,
-    port: parseInt(process.env.DB_PORT || "5432", 10),
+    host: env.db.host,
+    port: env.db.port,
     dialect: "postgres",
     logging: false,
   },

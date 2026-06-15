@@ -63,7 +63,6 @@ Staff.init(
     username: {
       type: DataTypes.STRING(100),
       allowNull: false,
-      unique: true,
       validate: {
         notEmpty: { msg: "Username is required" },
       },
